@@ -11,6 +11,7 @@ fn usage() {
 type BlocksVec = Vec<BTreeSet<String>>;
 
 struct Config {
+    filename: String,
     original: String,
     blocks: BlocksVec,
 }
@@ -44,8 +45,19 @@ fn read_config(path: &str) -> Config {
     }
 
     Config {
+        filename: path.to_owned(),
         original: content,
         blocks: config,
+    }
+}
+
+impl Config {
+    fn print(&self) {
+        println!("--------------------------------------\n\n\
+                  '{}' config: \n{}\
+                  \n\n--------------------------------------",
+                 self.filename,
+                 self.original);
     }
 }
 
@@ -64,20 +76,20 @@ fn compare_configs(config0: &mut Config, config1: &mut Config) {
         }
 
         if !found {
-            println!("First config: \n{}\n\n--------------------------------------",
-                     config0.original);
-            println!("Second config: \n{}\n\n--------------------------------------",
-                     config1.original);
-            panic!("Could not find a block in the second config: {:?}", search);
+            config0.print();
+            config1.print();
+            panic!("Could not find a block in the '{}' config: {:?}",
+                   config0.filename,
+                   search);
         }
     }
 
     if !config1.blocks.is_empty() {
-        println!("First config: \n{}\n\n--------------------------------------",
-                 config0.original);
-        println!("Second config: \n{}\n\n--------------------------------------",
-                 config1.original);
-        panic!("The second config contains more blocks than the first config! Leftover: {:?}",
+        config0.print();
+        config1.print();
+        panic!("The '{}' config contains more blocks than the '{}' config! Leftover: {:?}",
+               config1.filename,
+               config0.filename,
                config1.blocks);
     }
 }

@@ -79,7 +79,7 @@ fn compare_configs(config0: &mut Config, config1: &mut Config) {
             config0.print();
             config1.print();
             panic!("Could not find a block in the '{}' config: {:?}",
-                   config0.filename,
+                   config1.filename,
                    search);
         }
     }
